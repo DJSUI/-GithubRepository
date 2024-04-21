@@ -1,0 +1,27 @@
+********建表**********************
+
+CREATE TABLE Students (
+  studentId VARCHAR(100) NOT NULL,
+  name VARCHAR(100),
+  gender VARCHAR(10),
+  age INT(10),
+  PRIMARY KEY (studentId) 
+);
+
+*****测试数据*******************
+
+INSERT INTO Students(studentId,name,gender,age) VALUES('asd1147','DJ','man',27);
+INSERT INTO Students(studentId,name,gender,age) VALUES('zxc1146','KAN','woman',25);
+
+INSERT INTO Students(studentId,name,gender,age) VALUES('test123','testUser1','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test312','testUser2','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test232','testUser3','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test412','testUser4','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test512','testUser5','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test567','testUser6','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test856','testUser7','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test835','testUser8','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test568','testUser9','man',25);
+INSERT INTO Students(studentId,name,gender,age) VALUES('test385','testUser10','man',25);
+
+

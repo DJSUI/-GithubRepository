@@ -1,0 +1,65 @@
+.map-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: skyblue;
+  padding-left: 220px;
+  padding-top: 50px;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: #f5811b;
+  color: white;
+}
+
+.left-sider {
+  position: absolute;
+  top: 50px;
+  /* Height of the header */
+  left: 0;
+  width: 225px;
+  height: 700px;
+  /* Height of the footer and header */
+  background-color: white;
+  color: white;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background-color: #666;
+  color: white;
+}
+
+.fixed-window {
+  position: fixed;
+  top: 50px;
+  left: 225px;
+  width: 225px;
+  /* 与左侧边栏相同的宽度 */
+  height: calc(100% - 100px);
+  /* 与地图容器相同的高度 */
+  background-color: #ccc;
+  z-index: 999;
+  /* 使其位于其他内容上方 */
+}
+
+.RouteSearch {
+  position: absolute;
+  top: 10px;
+  /* 调整垂直位置 */
+  left: 10px;
+  /* 可以根据需要调整水平位置 */
+  z-index: 100;
+  /* 确保 RouteSearch 组件位于最顶层 */
+}

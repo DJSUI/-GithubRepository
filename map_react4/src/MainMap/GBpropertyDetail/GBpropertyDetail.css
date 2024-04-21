@@ -1,0 +1,91 @@
+.GBpropertyDetail-window {
+  display: flex;
+  /* 使用flex布局 */
+  flex-direction: column;
+  /* 子元素垂直排列 */
+  max-height: 100%;
+  /* 最大高度不超过其容器 */
+  max-width: 100%;
+  /* 最大宽度不超过其容器 */
+  overflow: auto;
+  /* 如果内容超出，出现滚动条 */
+  box-sizing: border-box;
+  /* 边框和内边距计入宽度 */
+
+  width: 270px;
+  height: 400px;
+  position: fixed;
+  cursor: move;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.window-header {
+  display: flex;
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  background-color: #f87171;
+  /* 您可以根据需要修改颜色 */
+  color: white;
+  padding: 5px 10px;
+  cursor: grab;
+}
+
+.window-content {
+  padding: 10px;
+  flex: 1;
+  /* 填充剩余空间 */
+
+}
+
+.close-button {
+  margin-left: auto;
+  /* 这将推动按钮到容器的右边 */
+  color: white;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-weight: bold;
+  font-size: 16px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+}
+
+.close-button:hover {
+  color: #f00;
+  /* 鼠标悬停时的颜色 */
+}
+
+.text-box {
+  width: 100%;
+  /* 设置宽度为100% */
+  height: 60px;
+  box-sizing: border-box;
+  /* 包含padding和border在内的宽度 */
+  padding: 10px;
+  /* 根据需要设置内间距 */
+  margin: 0;
+  /* 设置外间距为0 */
+}
+
+.menu-container {
+  /* 使用Flexbox来排列按钮和文本输入 */
+  display: flex;
+  flex-direction: column;
+  /* 子元素垂直排列 */
+}
+
+hr {
+  margin-left: 0;
+}
+
+.logo {
+
+  width: 25px;
+  height: 25px;
+}
