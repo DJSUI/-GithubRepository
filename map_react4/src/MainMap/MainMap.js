@@ -98,24 +98,24 @@ const MainMap = () => {
         console.log("routes",routes);
         if (routes !== null) {
           routes.forEach((route, index) => {
-            const save_Source = new VectorSource();
+            let save_Source = new VectorSource();
               // 存储点创建
             route.marker.forEach(coord => {
-              const Fcoord = fromLonLat(coord) 
-              const markerFeature = new Feature({
+              let Fcoord = fromLonLat(coord) 
+              let markerFeature = new Feature({
                 geometry: new Point(Fcoord),
               });
               
               save_Source.addFeature(markerFeature);
                });
               // 存储线创建
-            const lineCoords = route.line.map(coord => fromLonLat(coord));
-            const lineFeature = new Feature({
+            let lineCoords = route.line.map(coord => fromLonLat(coord));
+            let lineFeature = new Feature({
                 geometry: new LineString(lineCoords),
             });
-            user_edit_vectorSource.addFeature(lineFeature);
+            save_Source.addFeature(lineFeature);
               // 存储层创建 
-            const save_Layer = new VectorLayer({
+            let save_Layer = new VectorLayer({
               title: `route${index + 1}`,
               source: save_Source,
               style: [
@@ -149,65 +149,65 @@ const MainMap = () => {
       });
 
 // 图层3--- 用户自定义路径图层集
-  const user_edit_vectorSource = new VectorSource();
-// 创建点的 Feature 并添加到 VectorSource
-  addressList.forEach(coord => {
-      const Fcoord = fromLonLat(coord) 
-      const markerFeature = new Feature({
-        geometry: new Point(Fcoord),
-      });
-      user_edit_vectorSource.addFeature(markerFeature);
-  });
-  //
-if (fetchNaviInfoTrigger) {
-  axios.post('api/ACCESSTOKEN/', { name: NAME })
-    .then(response => {
-      let MAPBOX_ACCESS_TOKEN = JSON.parse(JSON.stringify(response.data));
-      const coordinates = addressList.map(coord => `${coord[0]},${coord[1]}`).join(';');    
-      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?steps=true&geometries=geojson&access_token=${MAPBOX_ACCESS_TOKEN}`)
-      .then(response => response.json())
-      .then(data => {
-        const route = data.routes[0].geometry.coordinates;
-        const lineCoords_user = route.map(coord => fromLonLat(coord));
-        const lineFeature_user = new Feature({
-          geometry: new LineString(lineCoords_user),
+    const user_edit_vectorSource = new VectorSource();
+  // 创建点的 Feature 并添加到 VectorSource
+    addressList.forEach(coord => {
+        const Fcoord = fromLonLat(coord) 
+        const markerFeature = new Feature({
+          geometry: new Point(Fcoord),
         });
-        user_edit_vectorSource.addFeature(lineFeature_user);
-      });
-    })
-    .catch(error => {
-      console.error('获取TOKEN失败', error);
+        user_edit_vectorSource.addFeature(markerFeature);
     });
-}
-// 创建一个 VectorLayer，将 VectorSource 添加到其中
-const edit_Layer = new VectorLayer({
-  title: "Edit_route",
-  source: user_edit_vectorSource,
-  style: [
-    // 点的样式
-    new Style({
-      image: new Circle({
-        radius: 6,
-        fill: new Fill({ color: 'red' }),
-        stroke: new Stroke({ color: 'white', width: 2 }),
+    //
+  if (fetchNaviInfoTrigger) {
+    axios.post('api/ACCESSTOKEN/', { name: NAME })
+      .then(response => {
+        let MAPBOX_ACCESS_TOKEN = JSON.parse(JSON.stringify(response.data));
+        const coordinates = addressList.map(coord => `${coord[0]},${coord[1]}`).join(';');    
+        fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?steps=true&geometries=geojson&access_token=${MAPBOX_ACCESS_TOKEN}`)
+        .then(response => response.json())
+        .then(data => {
+          const route = data.routes[0].geometry.coordinates;
+          const lineCoords_user = route.map(coord => fromLonLat(coord));
+          const lineFeature_user = new Feature({
+            geometry: new LineString(lineCoords_user),
+          });
+          user_edit_vectorSource.addFeature(lineFeature_user);
+        });
+      })
+      .catch(error => {
+        console.error('获取TOKEN失败', error);
+      });
+  }
+  // 创建一个 VectorLayer，将 VectorSource 添加到其中
+  const edit_Layer = new VectorLayer({
+    title: "Edit_route",
+    source: user_edit_vectorSource,
+    style: [
+      // 点的样式
+      new Style({
+        image: new Circle({
+          radius: 6,
+          fill: new Fill({ color: 'red' }),
+          stroke: new Stroke({ color: 'white', width: 2 }),
+        }),
       }),
-    }),
-    // 线的样式
-    new Style({
-      stroke: new Stroke({
-        color: 'blue', 
-        width: 4,      
+      // 线的样式
+      new Style({
+        stroke: new Stroke({
+          color: 'blue', 
+          width: 4,      
+        }),
       }),
-    }),
-  ],
-});
+    ],
+  });
+  const modifyInteraction = new Modify({
+        source: user_edit_vectorSource,
+  });
+  map.addInteraction(modifyInteraction);
+  map.addLayer(edit_Layer)
+    
 
-// 将 VectorLayer 添加到地图
-map.addLayer(edit_Layer);
-    
-    
-    
-   
     // 销毁地图实例
     return () => {
       map.setTarget(null);
@@ -215,6 +215,7 @@ map.addLayer(edit_Layer);
   }, [addressList, fetchNaviInfoTrigger,urlMap]);
   
    
+
 //*** 打印地图
   const handlePrintPDF = () => {
     // 获取地图容器元素 有点表示使用选择器
