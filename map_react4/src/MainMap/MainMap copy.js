@@ -1,10 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import "./MainMap.css";
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
-import axios from 'axios';
-import '../Mock/Mock'
 //引入ol相关
 import 'ol/ol.css';
 import Map from 'ol/Map';
@@ -32,7 +30,7 @@ import RouteSearch from "./RouteSearch/RouteSearch";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-// TODO： 打印点功能加入到mockjs当中，使得地图能显示 点和线 
+
 
 
 const MainMap = () => {
@@ -42,39 +40,23 @@ const MainMap = () => {
   const addressList = useSelector(state => state.Maps.addressList);
     // 获取画路线开关
   const fetchNaviInfoTrigger = useSelector(state => state.Maps.fetchNaviInfoTrigger);
-  // 获取routes 
+    
+
+
+// ****配置地图底层********
   const mapRef = useRef(null);
-  const [urlMap, setUrlMap] = useState(null);
-
-
-
   useEffect(() => {
-   
-    const NAME = 'Alice';   //模拟登陆用户     Alice    Bob    Tom
-    
-
-    // ***获取地图基础层
-    axios.post('api/FetchMap/', { name: NAME })
-      .then(response => { 
-        let res = null
-        res = JSON.parse(JSON.stringify(response.data));
-        console.log("res url" , res);
-        setUrlMap(res)
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-    
-   const map = new Map({
+    const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiZGFpamlhbmciLCJhIjoiY2x1cm51NDRxMDlheDJpbzk2ajhzN3p1bSJ9._Jjt7AubEPM0RCoDCM4NTg';
+    const map = new Map({
       target: mapRef.current,
-      //  图层1---地图基础层 
+      // 1 定义图层  
       layers: [
         //  openlayer需要多种不同类型的图层 TileLayer（瓦片图层）、VectorLayer（矢量图层）
         // 创建一个瓦片层（用于做一个底层）
         new TileLayer({
           source: new XYZ({
             title: "baseMap",
-            url: urlMap,
+            url: `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_ACCESS_TOKEN}`,
             crossOrigin:'anonymous',
           }),
         }),
@@ -91,122 +73,88 @@ const MainMap = () => {
     const layerSwitcher = new LayerSwitcherImage();
     map.addControl(layerSwitcher)
         
-    // 图层2----矢量存储在数据库中图层集【循环创建】     
-    axios.post('api/FetchRoutes/', { name: NAME })
-      .then(response => {
-        let routes = []
-        routes = JSON.parse(JSON.stringify(response.data));
-        if (routes !== null) {
-           routes.forEach((route,index) => {
-          const lineCoords = route.map(coord => fromLonLat(coord));
-          const drawSource = new VectorSource();
-          const drawLayer = new VectorLayer({
-            source: drawSource,
-            title: `route${index + 1}`, // 设置图层的标题，可以根据需要进行修改
-            style: new Style({
-              stroke: new Stroke({
-                color: 'blue', // 设置线的颜色
-                width: 4,      // 设置线的宽度
-              }),
-            }),
-          });
-        const lineFeature = new Feature({
-            geometry: new LineString(lineCoords),
-         });
-         drawSource.addFeature(lineFeature);
-             const modify = new Modify({
-              source: drawSource,
-          });
-        map.addInteraction(modify);
-        map.addLayer(drawLayer);
-          
-        });
-        }
 
-      })
-      .catch(error => {
-        console.error('获取信息+创建图层失败', error);
-      });
-
-    
-    
-    
-    // TODO； 优化将线和点放在一个vector
-    // 图层3--- 用户自定义路径图层 
-      // 增加一个矢量层 用于显示marker 
-      const markerLayer = new VectorLayer({
-        title: "user_edit_marker",
-        source: new VectorSource(),
-        style: new Style({
-          image: new Circle({
-            radius: 6,
-            fill: new Fill({ color: 'red' }),
-            stroke: new Stroke({ color: 'white', width: 2 }),
-          }),
+  
+    // ***增加一个矢量层 用于显示marker 
+    const markerLayer = new VectorLayer({
+      title: "Marker",
+      source: new VectorSource(),
+      style: new Style({
+        image: new Circle({
+          radius: 6,
+          fill: new Fill({ color: 'red' }),
+          stroke: new Stroke({ color: 'white', width: 2 }),
         }),
+      }),
+     });
+    // 创建多个标记的 Feature 并添加到 VectorLayer
+    addressList.forEach(coord => {
+      const Fcoord = fromLonLat(coord) 
+      const markerFeature = new Feature({
+        geometry: new Point(Fcoord),
       });
-      // 创建多个标记的 Feature 并添加到 VectorLayer
-      addressList.forEach(coord => {
-        const Fcoord = fromLonLat(coord) 
-        const markerFeature = new Feature({
-          geometry: new Point(Fcoord),
-        });
-        markerLayer.getSource().addFeature(markerFeature);
-      });
-    
-          // 将 VectorLayer 添加到地图
-      map.addLayer(markerLayer);
-    // 增加一个矢量层， 用于绘制路径
-    const drawSource_user = new VectorSource();
-    const drawLayer_user = new VectorLayer({
-      source: drawSource_user,
-      title: "user_edit_route",
+      markerLayer.getSource().addFeature(markerFeature);
+    });
+        // 将 VectorLayer 添加到地图
+    map.addLayer(markerLayer);
+
+
+  
+    // ***增加一个矢量层， 用于绘制线在地图上地
+    const drawSource = new VectorSource();
+    const drawLayer = new VectorLayer({
+      source: drawSource,
+      title: "Line",
       style: new Style({
         stroke: new Stroke({
-          color: 'blue', // 设置线的颜色
+          color: 'skyblue', // 设置线的颜色
           width: 4,      // 设置线的宽度
         }),
       }),
     });
-    map.addLayer(drawLayer_user);
-      if (fetchNaviInfoTrigger) {
-        
-        axios.post('api/ACCESSTOKEN/', { name: NAME })
-          .then(response => {
-            let MAPBOX_ACCESS_TOKEN = JSON.parse(JSON.stringify(response.data));
-            const coordinates = addressList.map(coord => `${coord[0]},${coord[1]}`).join(';');    
-            fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?steps=true&geometries=geojson&access_token=${MAPBOX_ACCESS_TOKEN}`)
+    map.addLayer(drawLayer);
+
+
+   
+    if (fetchNaviInfoTrigger) {
+      // 将坐标点转换为字符串形式，以便传递给 Mapbox Directions API
+        const coordinates = addressList.map(coord => `${coord[0]},${coord[1]}`).join(';');    
+      
+
+          // 向 Mapbox Directions API 发送请求
+          fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?steps=true&geometries=geojson&access_token=${MAPBOX_ACCESS_TOKEN}`)
             .then(response => response.json())
             .then(data => {
               const route = data.routes[0].geometry.coordinates;
               // console.log("route_List",route);  实验用的三个坐标返回了33个坐标点，坐标点之间相互连接形成线
-              const lineCoords_user = route.map(coord => fromLonLat(coord));
-              const lineFeature_user = new Feature({
-                geometry: new LineString(lineCoords_user),
+              const lineCoords = route.map(coord => fromLonLat(coord));
+              const lineFeature = new Feature({
+                geometry: new LineString(lineCoords),
               });
-              drawSource_user.addFeature(lineFeature_user);
+              drawSource.addFeature(lineFeature);
             });
+
+          // 添加绘制交互功能
+          // const draw = new Draw({
+          //   source: drawSource,
+          //   type: 'LineString',
+          // });
+          // map.addInteraction(draw);
             // 添加修改线的交互功能
-          const modify_user = new Modify({
-            source: drawSource_user,
+          const modify = new Modify({
+            source: drawSource,
           });
-          map.addInteraction(modify_user);
-          map.addInteraction(new Snap({ source: drawSource_user }));
-          })
-        .catch(error => {
-            console.error('获取TOKEN失败', error);
-          });
-    
+          map.addInteraction(modify);
+          map.addInteraction(new Snap({ source: drawSource }));
     }
     
    
-    // 销毁地图实例
+
     return () => {
       map.setTarget(null);
     };
-  }, [addressList, fetchNaviInfoTrigger,urlMap]);
+  }, [addressList, fetchNaviInfoTrigger]);
   
-   
 //*** 打印地图
   const handlePrintPDF = () => {
     // 获取地图容器元素 有点表示使用选择器

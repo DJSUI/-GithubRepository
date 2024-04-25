@@ -191,7 +191,7 @@ const convertCord = async () => {
     
     <div
       ref={ref}
-      className="GBpropertyDetail-window"
+      className="RouteSearch-window"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -202,15 +202,15 @@ const convertCord = async () => {
       onMouseMove={onMouseMove}
     >
    
-      <div className="menu-container" style={{ display: 'flex', flexDirection: 'row', overflow: 'scroll'}}>
+      <div className="menu-container" style={{ display: 'flex', flexDirection: 'row',width: "250px"}}>
 
-        <div style={{ display: 'flex', flexDirection: 'column', flex: "12", overflow: 'auto' }}>
-          <div className="window-header" style={{ width: '400px', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', flex: "12" ,width: "250px"  }}>
+          <div className="window-header" style={{ width: '270px', justifyContent: 'space-between' }}>
             <h4 style={{color:'black'}}>ルート検索</h4>
             {/* 更新关闭按钮 */}
             <button className="close-button" onClick={() => dispatch(changeShowRouteSearch())} >X</button>
           </div>
-          <div className="col" style={{ flex: '1', width: "100%" }}>
+          <div className="col routelist" style={{ flex: '1', }}>
             {addressItems}
             
 

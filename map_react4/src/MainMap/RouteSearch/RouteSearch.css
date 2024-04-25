@@ -1,13 +1,13 @@
-.GBpropertyDetail-window {
+.RouteSearch-window {
   display: flex;
   /* 使用flex布局 */
   flex-direction: column;
   /* 子元素垂直排列 */
   max-height: 100%;
   /* 最大高度不超过其容器 */
-  max-width: 100%;
+  max-width: 300px;
   /* 最大宽度不超过其容器 */
-  overflow: auto;
+
   /* 如果内容超出，出现滚动条 */
   box-sizing: border-box;
   /* 边框和内边距计入宽度 */
@@ -88,4 +88,10 @@ hr {
 
   width: 25px;
   height: 25px;
+}
+
+.routelist {
+  overflow: auto;
+  overflow-x: hidden;
+  max-height: 250px;
 }
