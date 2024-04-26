@@ -116,7 +116,7 @@ Mock.mock('api/FetchMap/', 'post', (options) => {
   }
 });
 
- // API-----用于返回TOKEN
+ // API3-----用于返回TOKEN
 
 Mock.mock('api/ACCESSTOKEN/', 'post', (options) => {
   const { name } = JSON.parse(options.body); 
