@@ -5,16 +5,21 @@ public class LoginUser {
     private String pwd;
     private String name;
     private String course;
+    private String role;
 // 必须要存在无参数构造函数
     public LoginUser() {
 
     }
-// 必须存在有参数的构造函数 
+
+
+
+    // 必须存在有参数的构造函数
     public LoginUser(String id, String pwd, String name, String course) {
         this.id = id;
         this.pwd = pwd;
         this.name = name;
         this.course = course;
+        this.role = role;
     }
 
     public String getId() {
@@ -48,4 +53,7 @@ public class LoginUser {
     public void setCourse(String course) {
         this.course = course;
     }
+    public String getRole() {return role;}
+
+    public void setRole(String role) {this.role = role;}
 }
