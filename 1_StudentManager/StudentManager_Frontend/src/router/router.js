@@ -39,22 +39,24 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-
+  const token = localStorage.getItem('token');
   if (to.name !== 'LoginPage') {
-   
-    if (!store.state.user) {
-      
+    // 如果不是登录页，检查是否存在 token
+    if (!token) {
+      // 如果不存在 token，则跳转到 LoginPage 页面
       alert("Please login first!");
       setTimeout(() => {
-             next('/LoginPage');
-     },1000)
+        next('/LoginPage');
+      }, 1000);
     } else {
+      // 如果存在 token，则继续导航
       next();
     }
   } else {
-   
-    next();
+    // 如果是登录页，直接导航
+   next()
+    
   }
-})
+});
 
 export default router;

@@ -1,5 +1,7 @@
-package com.sdj;
+package com.sdj.mapper;
 
+import com.sdj.entity.LoginUser;
+import com.sdj.entity.Student;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -37,9 +39,14 @@ import java.util.List;
 //        增加学生逻辑
         @Insert("INSERT INTO Students (studentId, name, gender, age) VALUES(#{param2.studentId}, #{param2.name}, #{param2.gender}, #{param2.age})")
         int addStudent(String id, Student addStudent);
-//      登陆验证
+
+//        存在token时候 ，解析token 验证密码是否正确,返回整个学生实体
+//            mybatis写法不需要 写成sql语句
+        LoginUser selectById(Integer id);
+
+        //    首次登陆的时候，用于验证账号和密码
         @Select("SELECT * FROM Login_user WHERE id = #{id}")
-            LoginUser resualtAuthentic(String id);
+        LoginUser resualtAuthentic(String id);
 
 
 

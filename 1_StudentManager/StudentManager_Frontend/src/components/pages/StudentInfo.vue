@@ -265,7 +265,7 @@ export default {
   methods: {
     //  取得学生信息逻辑 ************************
     fetchStudents() {
-      axios.get('http://localhost:8085/api/Students')
+      axios.get('/Students')
         .then(response => {
           console.log('!!!! zhao dao le ' + response.data)
           // 真实API students 形式是一群对象的形式，使用空数组接收形式： this.students = response.data;

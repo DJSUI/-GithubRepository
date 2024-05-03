@@ -1,9 +1,15 @@
-package com.sdj;
+package com.sdj.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.hutool.core.util.ObjectUtil;
+import com.sdj.common.enums.ResultCodeEnum;
+import com.sdj.entity.LoginUser;
+import com.sdj.entity.Student;
+import com.sdj.exception.CustomException;
+import com.sdj.mapper.StudentMapper;
+import com.sdj.utils.TokenUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
@@ -11,7 +17,7 @@ public class StudentService {
 //    2 studentMapper 调用mapper方法，并指向=》StudentMapper
 
 //     学生信息查询功能
-    @Autowired
+    @Resource
     private StudentMapper studentMapper;
 
     public List<Student> getAllStudents() {
@@ -63,14 +69,29 @@ public boolean addStudent(String id ,Student addStudent) {
 }
 
 
-//   用户登陆功能
-    public LoginUser authenticate(String id , String pwd){
-        LoginUser  loginUser = studentMapper.resualtAuthentic(id);
-        if (loginUser != null && loginUser.getPwd().equals(pwd)) {
-            return loginUser;
-        } else {
-            return null; // 用户名或密码不匹配，返回null
+// 用于token 验证功能 主要验证在JWT 中
+    public  LoginUser  selectById(Integer id) {
+        System.out.println("执行了Token验证service  且 解析token中的id为   "+id);
+        return studentMapper.selectById(id);
+    }
+
+
+// 无token 用户登陆
+
+    public LoginUser authenticate(LoginUser loginUser){
+//        更具用户登陆账号， 获取数据库真实实体
+        LoginUser  dbLoginUser = studentMapper.resualtAuthentic(loginUser.getId());
+        if (ObjectUtil.isNull(dbLoginUser)) {
+            throw new CustomException(ResultCodeEnum.USER_NOT_EXIST_ERROR);
         }
+        if (!loginUser.getPwd().equals(dbLoginUser.getPwd())) {
+            throw new CustomException(ResultCodeEnum.USER_ACCOUNT_ERROR);
+        }
+        // 生成token  将ID和password 作为token的一部分生成出来
+        String token = TokenUtils.createToken(dbLoginUser.getId(), dbLoginUser.getPwd());
+        dbLoginUser.setToken(token);
+        return dbLoginUser;
+
 
     }
 

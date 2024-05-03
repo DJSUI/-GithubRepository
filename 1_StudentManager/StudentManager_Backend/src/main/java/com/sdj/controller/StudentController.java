@@ -1,10 +1,15 @@
-package com.sdj;
+package com.sdj.controller;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sdj.common.Result;
+import com.sdj.common.enums.ResultCodeEnum;
+import com.sdj.service.StudentService;
+import com.sdj.entity.LoginUser;
+import com.sdj.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,25 +98,26 @@ public class StudentController {
         }
     }
 
-//    用户登录逻辑
-@PostMapping("/login")
-@CrossOrigin(origins = "http://localhost:8080")
-public ResponseEntity<LoginUser> login(@RequestBody LoginUser loginUser) {
-    // 从请求中获取用户名和密码
-    String id = loginUser.getId();
-    String pwd = loginUser.getPwd();
+    //    用户登录逻辑
+    @PostMapping("/login")
+    @CrossOrigin(origins = "http://localhost:8080")
+    public Result login(@RequestBody LoginUser loginUser) {
+        if (ObjectUtil.isEmpty(loginUser.getId()) || ObjectUtil.isEmpty(loginUser.getPwd())) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
 
-    // 使用 UserService 进行验证
-    LoginUser user = studentService.authenticate(id, pwd);
+        loginUser = studentService.authenticate(loginUser);
 
-    if (user != null) {
-        // 如果验证成功，返回用户信息
-        return ResponseEntity.ok(user);
-    } else {
-        // 如果验证失败，返回未授权状态码
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return Result.success(loginUser);
     }
-}
+//TODO： 登陆者信息获取
+//    @GetMapping("/login/search")
+//    @CrossOrigin(origins = "http://localhost:8080")
+//    public LoginUser LoginUserInfo(@RequestParam("token") String token) {
+//        // 调用Service层的方法查询学生信息
+//        System.out.println("拿到token"+token);
+//        return null;
+//    }
 
 
 

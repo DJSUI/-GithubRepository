@@ -1,4 +1,4 @@
-package com.sdj;
+package com.sdj.entity;
 
 public class Student {
   private String studentId;

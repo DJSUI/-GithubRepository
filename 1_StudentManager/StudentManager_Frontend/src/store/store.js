@@ -38,6 +38,8 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, user) {
       state.user = user;
+      // 将获取到的 token 存储到 LocalStorage 中
+      localStorage.setItem('token', state.user.token);
     }
   },
  

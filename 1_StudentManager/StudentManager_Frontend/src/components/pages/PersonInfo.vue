@@ -5,6 +5,7 @@
       <div>
         <p>教职工账号 {{ userInfo.id }} </p>
         <p>担任课程: {{ userInfo.course }}</p>
+         <p>账号权限: {{ userInfo.role }}</p>
         <!-- <p v-if="tClass">担任班级: {{ userInfo.tClass }}</p> -->
 
 
@@ -23,9 +24,9 @@ export default {
   name: "PersonInfo",
 
 
-  // 第一种获取状态方式
+ 
   mounted() {
-
+     // 第一种获取状态方式
     this.$store.dispatch('fetchUser').then(userData => {
       this.userInfo = userData;
       console.log("Personinfo.this.userInfo", this.userInfo);
@@ -40,9 +41,7 @@ export default {
   
   data() {
     return {
-      userInfo: {
-
-      }
+      userInfo: {}
     }
   },
   methods: {

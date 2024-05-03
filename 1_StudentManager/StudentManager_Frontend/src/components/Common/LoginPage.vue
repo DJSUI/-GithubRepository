@@ -80,11 +80,14 @@ export default {
   }),
   methods: {
     Login() {
-      axios.post('http://localhost:8085/api/login', { id: this.id, pwd: this.pwd })
+      axios.post('/login', { id: this.id, pwd: this.pwd })
         .then(response => {
-          // 登录成功，将用户信息存储到Vuex
-          console.log('response.data', response.data);
-          this.$store.commit('setUser', response.data);
+          // 登录成功，打印token信息
+          console.log('response.data', response.data.data.token);
+            // 将获取到的 token 存储到 LocalStorage 中
+          localStorage.setItem('token', response.data.data.token);
+         
+          this.$store.commit('setUser', response.data.data);
           // 重定向到主页
           this.$router.push('/HomePage/PersonInfo');
         })

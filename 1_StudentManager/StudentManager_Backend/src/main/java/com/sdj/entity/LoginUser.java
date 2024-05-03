@@ -1,4 +1,4 @@
-package com.sdj;
+package com.sdj.entity;
 
 public class LoginUser {
     private String id;
@@ -6,6 +6,7 @@ public class LoginUser {
     private String name;
     private String course;
     private String role;
+    private String token;
 // 必须要存在无参数构造函数
     public LoginUser() {
 
@@ -56,4 +57,9 @@ public class LoginUser {
     public String getRole() {return role;}
 
     public void setRole(String role) {this.role = role;}
+
+//    因为数据库中没数据，所以只有getter和setter方法
+    public String getToken() {return token;}
+
+    public void setToken(String token) {this.token = token;}
 }

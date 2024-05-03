@@ -78,6 +78,13 @@ const MainMap = () => {
             crossOrigin:'anonymous',
           }),
         }),
+        new TileLayer({
+          source: new XYZ({
+           title: "trafficMap",
+          url: 'https://api.mapbox.com/styles/v1/mapbox/traffic-night-v2/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGFpamlhbmciLCJhIjoiY2x1cm51NDRxMDlheDJpbzk2ajhzN3p1bSJ9._Jjt7AubEPM0RCoDCM4NTg' ,
+          crossOrigin: 'anonymous',
+        }),
+      }),
       ],
       
       // 在地图对象的view属性中配置地图的视图。视图包括地图的中心点、缩放级别、投影方式等信息。
