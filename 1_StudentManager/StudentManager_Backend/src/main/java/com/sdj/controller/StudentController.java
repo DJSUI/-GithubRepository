@@ -28,7 +28,10 @@ public class StudentController {
     //因为浏览器跨源资源共享（CORS）策略限制，访问同一IP的不同端口，会被浏览器限制
     @CrossOrigin(origins = "http://localhost:8080")
     public List<Student> getAllStudents() {
+
         return studentService.getAllStudents();
+
+
     }
 
     //查询学生信息************************************
