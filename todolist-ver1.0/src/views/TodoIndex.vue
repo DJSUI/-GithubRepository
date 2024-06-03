@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="header">
       <v-row>
-        <v-col cols=4>
+        <v-col cols=2>
           <div
             v-if="timerId || pauseHandle"
             style="width: 200px; 
@@ -44,10 +44,13 @@
           </div>
 
         </v-col>
-        <v-col cols=4>
-          <H1 style="text-align: left; height: 100px; font-size: 70px;">Mission</H1>
+        <v-col cols=7>
+          <h1
+            class="{'minimizeFont' : dataStore.storeName.length > 4  }"
+            style="text-align: center; height: 100px; "
+          >{{ dataStore.storeName ?? "bug unfound " }}</h1>
         </v-col>
-        <v-col cols=4>
+        <v-col cols=3>
           <div style="width: 300px; display: flex; flex-direction: column; align-items: flex-end;">
             <v-btn
               v-if="!timerId"
@@ -72,17 +75,21 @@
     <!-- Main Content -->
     <div class="body">
       TaskList area
+      <SetProject></SetProject>
     </div>
   </v-main>
 </template>
 
 <script>
+import SetProject from '../components/SetProject.vue'
 import { ref, watch, onUnmounted } from 'vue';
+import { useDataStore } from '../store/index.js'
 export default {
   name: "TodoIndex",
   setup() {
 
     try {
+      const dataStore = useDataStore()
       const inputHours = ref(0);
       const inputMinutes = ref(0);
       const remaniningSeconds = ref(0);
@@ -171,13 +178,15 @@ export default {
         pauseTimer,    // 暂停定时器的方法
         cancelTimer,   // 取消定时器的方法
         pauseHandle,
-        formatTimeUnit
+        formatTimeUnit,
+        dataStore
+
       };
     } catch (error) {
       console.error('error in setup ', error);
     }
   },
-  // components: {}
+  components: { SetProject }
 }
 </script>
 
@@ -206,5 +215,9 @@ export default {
 
 .v-messages {
   display: none;
+}
+
+.minimizeFont {
+  font-size: 30px;
 }
 </style>
