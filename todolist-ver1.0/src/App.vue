@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <TodoIndex />
+    <router-view></router-view>
 
   </v-app>
 </template>

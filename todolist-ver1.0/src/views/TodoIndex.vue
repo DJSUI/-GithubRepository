@@ -72,10 +72,10 @@
       </v-row>
 
     </div>
-    <!-- Main Content -->
+    <!-- 任务区域 -->
     <div class="body">
-      TaskList area
-      <SetProject></SetProject>
+      <!-- <SetProject></SetProject> -->
+      <router-view></router-view>
     </div>
   </v-main>
 </template>
@@ -207,7 +207,7 @@ export default {
 
 
   background-color: #fff;
-
+  padding: 50px;
   margin-top: 0px;
 
 
