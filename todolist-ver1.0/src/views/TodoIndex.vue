@@ -80,114 +80,96 @@
   </v-main>
 </template>
 
-<script>
+<script setup>
 import SetProject from '../components/SetProject.vue'
 import { ref, watch, onUnmounted } from 'vue';
-import { useDataStore } from '../store/index.js'
-export default {
-  name: "TodoIndex",
-  setup() {
-
-    try {
-      const dataStore = useDataStore()
-      const inputHours = ref(0);
-      const inputMinutes = ref(0);
-      const remaniningSeconds = ref(0);
-      const timerId = ref(null);
-      const pauseHandle = ref(false);
-
-      const hours = ref(0);
-      const minutes = ref(0);
-      const seconds = ref(0);
-      // Math.floor是用来取得整数的
-      watch(remaniningSeconds, (newSeconds) => {
-        hours.value = Math.floor(newSeconds / 3600);
-        minutes.value = Math.floor((newSeconds % 3600) / 60);
-        seconds.value = newSeconds % 60;
-
-      })
-      function startTimer() {
-        // 确保在设置新的定时器之前清除旧的定时器
-        if (timerId.value) {
-          clearInterval(timerId.value);
-          timerId.value = null;
-        }
-
-        // 如果不是从暂停状态恢复，设置新的倒计时
-        if (!pauseHandle.value && (inputMinutes.value > 0 || inputHours.value > 0)) {
-          remaniningSeconds.value = inputMinutes.value * 60 + inputHours.value * 3600;
-          timerId.value = setInterval(() => {
-            if (remaniningSeconds.value > 0) {
-              remaniningSeconds.value--;
-            } else {
-              clearInterval(timerId.value);
-              timerId.value = null;
-              pauseHandle.value = false;
-            }
-          }, 1000);
-        }
-
-        // 如果是从暂停状态恢复
-        else if (pauseHandle.value && remaniningSeconds.value > 0) {
-          timerId.value = setInterval(() => {
-            if (remaniningSeconds.value > 0) {
-              remaniningSeconds.value--;
-            } else {
-              clearInterval(timerId.value);
-              timerId.value = null;
-              pauseHandle.value = false;
-            }
-          }, 1000);
-        }
-      }
+import { useDataStore } from '../store/index'
 
 
-      function pauseTimer() {
-        clearInterval(timerId.value);
-        timerId.value = null;
-        pauseHandle.value = true;
-        console.log(remaniningSeconds, pauseHandle);
+// try {
+const dataStore = useDataStore()
+const inputHours = ref(0);
+const inputMinutes = ref(0);
+const remaniningSeconds = ref(0);
+const timerId = ref(null);
+const pauseHandle = ref(false);
 
+const hours = ref(0);
+const minutes = ref(0);
+const seconds = ref(0);
+// Math.floor是用来取得整数的
+watch(remaniningSeconds, (newSeconds) => {
+  hours.value = Math.floor(newSeconds / 3600);
+  minutes.value = Math.floor((newSeconds % 3600) / 60);
+  seconds.value = newSeconds % 60;
 
-      }
+})
+function startTimer() {
+  // 确保在设置新的定时器之前清除旧的定时器
+  if (timerId.value) {
+    clearInterval(timerId.value);
+    timerId.value = null;
+  }
 
-      function cancelTimer() {
+  // 如果不是从暂停状态恢复，设置新的倒计时
+  if (!pauseHandle.value && (inputMinutes.value > 0 || inputHours.value > 0)) {
+    remaniningSeconds.value = inputMinutes.value * 60 + inputHours.value * 3600;
+    timerId.value = setInterval(() => {
+      if (remaniningSeconds.value > 0) {
+        remaniningSeconds.value--;
+      } else {
         clearInterval(timerId.value);
         timerId.value = null;
         pauseHandle.value = false;
-        remaniningSeconds.value = 0;
-        inputMinutes.value = 0;
-        inputHours.value = 0;
       }
-      onUnmounted(() => {
+    }, 1000);
+  }
+
+  // 如果是从暂停状态恢复
+  else if (pauseHandle.value && remaniningSeconds.value > 0) {
+    timerId.value = setInterval(() => {
+      if (remaniningSeconds.value > 0) {
+        remaniningSeconds.value--;
+      } else {
         clearInterval(timerId.value);
-      })
-      function formatTimeUnit(unit) {
-        return unit < 10 ? `0${unit}` : unit.toString();
+        timerId.value = null;
+        pauseHandle.value = false;
       }
-
-      return {
-        inputHours,   // 使小时输入在模板中可用
-        inputMinutes, // 使分钟输入在模板中可用
-        hours,        // 使计算的小时在模板中可用
-        minutes,      // 使计算的分钟在模板中可用
-        seconds,      // 使计算的秒在模板中可用
-        timerId,      // 可能用于显示定时器状态
-        remaniningSeconds, // 可用于调试或显示剩余秒数
-        startTimer,   // 开始定时器的方法
-        pauseTimer,    // 暂停定时器的方法
-        cancelTimer,   // 取消定时器的方法
-        pauseHandle,
-        formatTimeUnit,
-        dataStore
-
-      };
-    } catch (error) {
-      console.error('error in setup ', error);
-    }
-  },
-  components: { SetProject }
+    }, 1000);
+  }
 }
+
+
+function pauseTimer() {
+  clearInterval(timerId.value);
+  timerId.value = null;
+  pauseHandle.value = true;
+  console.log(remaniningSeconds, pauseHandle);
+
+
+}
+
+function cancelTimer() {
+  clearInterval(timerId.value);
+  timerId.value = null;
+  pauseHandle.value = false;
+  remaniningSeconds.value = 0;
+  inputMinutes.value = 0;
+  inputHours.value = 0;
+}
+onUnmounted(() => {
+  clearInterval(timerId.value);
+})
+
+function formatTimeUnit(unit) {
+  return unit < 10 ? `0${unit}` : unit.toString();
+}
+
+
+// } catch (error) {
+//   console.error('error in setup ', error);
+// }
+
 </script>
 
 
