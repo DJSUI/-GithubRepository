@@ -25,6 +25,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['delHandler'])
 function emitDel() {
+
   emit("delHandler", props.index);
 }
 

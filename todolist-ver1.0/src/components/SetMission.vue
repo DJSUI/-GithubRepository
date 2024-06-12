@@ -1,24 +1,25 @@
 <template>
   <div>
+    <v-btn
+      text="Add Mission"
+      @click="handleDialogSwitch"
+    ></v-btn>
+    <v-btn
+      text="Reset Project"
+      @click="resetProject"
+    ></v-btn>
+
     <v-dialog
       v-model="dialogSwitch"
       max-width="600"
       max-height="400"
       scrollable
     >
-      <template v-slot:activator="{ props: activatorProps }">
-        <v-btn
-          text="Add Mission"
-          @click="handleDialogSwitch"
-        ></v-btn>
-      </template>
-
 
       <v-card
         prepend-icon="mdi-earth"
-        title="Select Country"
+        title="Create Mssion"
       >
-        <v-divider class="mt-3"></v-divider>
 
         <v-card-text>
           <v-text-field
@@ -62,14 +63,16 @@
 
 <script setup>
 import Mission from './molecular/Mission.vue'
+import { useRouter } from 'vue-router';
 import { reactive, ref } from 'vue'
 
 const addlist = reactive([{ name: "这是测试任务1" }, { name: "这是测试任务2" }, { name: "这是测试任务3" }]);
 const dialogSwitch = ref(false);
 const missionName = ref("")
+const router = useRouter();
 
 
-// const activatorProps = ref(true);
+
 function delMssion(index) {
   console.log("SetMission index", index);
   addlist.splice(index, 1)
@@ -87,7 +90,11 @@ function handleSave() {
     missionName.value = ""; // 重置输入框
   }
   handleDialogSwitch();
+}
 
+
+function resetProject() {
+  router.push({ name: "SetProject" }, () => { }, () => { })
 }
 </script>
 
