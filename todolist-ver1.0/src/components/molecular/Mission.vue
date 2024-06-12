@@ -17,14 +17,14 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 
 const props = defineProps({
   index: Number,
+  name: String
 })
 const emit = defineEmits(['delHandler'])
 function emitDel() {
-  console.log("Button clicked, emitting event with index:");
   emit("delHandler", props.index);
 }
 

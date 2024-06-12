@@ -9,8 +9,8 @@
       <v-form @submit.prevent>
         <v-text-field
           v-model="PJname"
-          :rules="rules"
           label="ProjectName"
+          @keyup.enter="setName"
         ></v-text-field>
         <v-btn
           class="mt-2"
@@ -25,8 +25,10 @@
 
 <script setup>
 import { useDataStore } from '../store/index.js'
+import { useRouter } from 'vue-router';
 import { ref } from 'vue'
 
+const router = useRouter();
 const dataStore = useDataStore();
 const PJname = ref(null);
 function setName() {
@@ -35,6 +37,7 @@ function setName() {
   } else {
     console.log("para", PJname.value);
     dataStore.setName(PJname.value)
+    router.push({ name: "SetMission" }, () => { }, () => { })
   }
 }
 
