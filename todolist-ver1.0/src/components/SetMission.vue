@@ -82,7 +82,10 @@ function delMssion(index) {
 
 
 function handleDialogSwitch() {
+  console.log("DialSwitch has been called ");
   dialogSwitch.value = !dialogSwitch.value;
+  console.log("DialSwitch value is ", dialogSwitch.value);
+
 }
 
 function handleSave() {
@@ -105,9 +108,11 @@ function updateSessionStorage() {
 }
 
 onMounted(() => {
-  const storeAddList = sessionStorage.getItem('addList');
-  if (storeAddList) {
-    addList.splice(0, addList.length, ...JSON.parse(storedAddlist));
+
+  console.log("load onMouned ");
+  const storedAddList = sessionStorage.getItem('addList');
+  if (storedAddList) {
+    addList.splice(0, addList.length, ...JSON.parse(storedAddList));
   }
 })
 
