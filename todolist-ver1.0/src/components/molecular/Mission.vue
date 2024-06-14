@@ -5,7 +5,7 @@
       max-width="500px"
       style="display: flex"
     >
-      <h3>{{ name }}</h3>
+      <h3 style="text-align: center; width: 400px;">{{ name }}</h3>
       <v-btn
         density="compact"
         icon="mdi-close"

@@ -66,7 +66,9 @@ import Mission from './molecular/Mission.vue'
 import { useRouter } from 'vue-router';
 import { reactive, ref } from 'vue'
 
-const addlist = reactive([{ name: "这是测试任务1" }, { name: "这是测试任务2" }, { name: "这是测试任务3" }]);
+//const addlist = reactive([{ name: "这是测试任务1" }, { name: "这是测试任务2" }, { name: "这是测试任务3" }]);
+const addlist = reactive([]);
+
 const dialogSwitch = ref(false);
 const missionName = ref("")
 const router = useRouter();
@@ -95,6 +97,7 @@ function handleSave() {
 
 function resetProject() {
   router.push({ name: "SetProject" }, () => { }, () => { })
+
 }
 </script>
 
