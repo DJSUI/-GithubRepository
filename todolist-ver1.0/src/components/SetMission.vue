@@ -50,7 +50,7 @@
 
     </v-dialog>
     <Mission
-      v-for="(item, index) in addlist"
+      v-for="(item, index) in addList"
       :key="index"
       :name="item.name"
       :index="index"
@@ -64,11 +64,10 @@
 <script setup>
 import Mission from './molecular/Mission.vue'
 import { useRouter } from 'vue-router';
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 
-//const addlist = reactive([{ name: "这是测试任务1" }, { name: "这是测试任务2" }, { name: "这是测试任务3" }]);
-const addlist = reactive([]);
-
+//const addList = reactive([{ name: "这是测试任务1" }, { name: "这是测试任务2" }, { name: "这是测试任务3" }]);
+const addList = reactive(JSON.parse(sessionStorage.getItem('addList')) || []);
 const dialogSwitch = ref(false);
 const missionName = ref("")
 const router = useRouter();
@@ -77,7 +76,8 @@ const router = useRouter();
 
 function delMssion(index) {
   console.log("SetMission index", index);
-  addlist.splice(index, 1)
+  addList.splice(index, 1)
+  updateSessionStorage();
 }
 
 
@@ -88,17 +88,29 @@ function handleDialogSwitch() {
 function handleSave() {
   if (missionName.value.trim()) {
     // 使用 splice 在数组的第一个位置插入新的任务
-    addlist.splice(0, 0, { name: missionName.value });
+    addList.splice(0, 0, { name: missionName.value });
     missionName.value = ""; // 重置输入框
+    updateSessionStorage();
   }
   handleDialogSwitch();
 }
-
 
 function resetProject() {
   router.push({ name: "SetProject" }, () => { }, () => { })
 
 }
+
+function updateSessionStorage() {
+  sessionStorage.setItem('addList', JSON.stringify(addList))
+}
+
+onMounted(() => {
+  const storeAddList = sessionStorage.getItem('addList');
+  if (storeAddList) {
+    addList.splice(0, addList.length, ...JSON.parse(storedAddlist));
+  }
+})
+
 </script>
 
 <style scoped></style>
