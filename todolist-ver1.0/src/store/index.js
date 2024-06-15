@@ -10,7 +10,14 @@ export const useDataStore = defineStore('data', {
   },
   actions: {
     setName(projectName) {
-      this.storeName =  projectName
+      this.storeName = projectName
+      
+    },
+    initializeStore() { 
+      const storeName = sessionStorage.getItem('pjName');
+      if (storeName) {
+        this.storeName = storeName;
+      }
     }
   }
 

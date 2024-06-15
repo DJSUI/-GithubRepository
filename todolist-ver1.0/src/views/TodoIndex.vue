@@ -82,7 +82,7 @@
 
 <script setup>
 import SetProject from '../components/SetProject.vue'
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onUnmounted, onMounted } from 'vue';
 import { useDataStore } from '../store/index'
 
 
@@ -157,6 +157,10 @@ function cancelTimer() {
   inputMinutes.value = 0;
   inputHours.value = 0;
 }
+onMounted(() => {
+  dataStore.initializeStore();
+})
+
 onUnmounted(() => {
   clearInterval(timerId.value);
 })

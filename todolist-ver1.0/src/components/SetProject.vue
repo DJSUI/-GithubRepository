@@ -36,8 +36,9 @@ function setName() {
     dataStore.setName("Please Input Project Name ")
   } else {
     console.log("para", PJname.value);
-    dataStore.setName(PJname.value)
-    router.push({ name: "SetMission" }, () => { }, () => { })
+    dataStore.setName(PJname.value);
+    sessionStorage.setItem('pjName', PJname.value);
+    router.push({ name: "SetMission" }, () => { }, () => { });
   }
 }
 
