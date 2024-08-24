@@ -19,9 +19,17 @@ import java.util.List;
 //api的一层命名 /api
 @RequestMapping("/api")
 public class StudentController {
+
     //1 当请求过来先访问这里controller 层 ， 其次指向=》Service层
     @Autowired
     private StudentService studentService;
+
+
+
+    //TODO：  测试前后端连接性
+
+
+
     //遍历所有学生信息******************************
     @GetMapping("/Students")
     // 实际后端程序端口为8085， 这里则是模拟从8080
@@ -30,8 +38,6 @@ public class StudentController {
     public List<Student> getAllStudents() {
 
         return studentService.getAllStudents();
-
-
     }
 
     //查询学生信息************************************
