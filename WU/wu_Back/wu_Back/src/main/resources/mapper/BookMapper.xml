@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sdj.wu_back.dao.BookDao">
+    <select id="findBySearch" resultType="com.sdj.wu_back.entity.Book">
+        select a.*,b.name as typeName from book as a
+        left join type as b  on a.typeId  = b.id
+
+        <where>
+            <if test="params != null and params.name !=null and params.name != ''">
+                and  a.name like concat("%",#{params.name},"%")
+            </if>
+
+            <if test="params != null and params.author !=null and params.author != ''">
+                and  a.author like concat("%",#{params.author},"%")
+            </if>
+        </where>
+        order by  a.id
+    </select>
+
+
+    <update id="updateBook" parameterType="com.sdj.wu_back.entity.Book">
+        update book
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="press != null">press = #{press},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="typeId != null">typeId = #{typeId},</if>
+            <if test="content != null">content = #{content},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="addBook" parameterType="com.sdj.wu_back.entity.Book">
+
+        insert into  book(name,price,author,press,img,typeId,content)values (#{name}, #{price},#{author},#{press},#{img},#{typeId},#{content})
+
+    </insert>
+
+    <delete id="deleteBook">
+        delete from book where id =#{id}
+    </delete>
+
+
+</mapper>

@@ -220,7 +220,7 @@ const convertCord = async () => {
           <div style={{ display: 'flex', justifyContent: 'space-between' ,marginTop:'10px',marginBottom:'10px'}}>
             {/* <Button variant="outline-dark" size="sm"onClick={()=>dispatch(receiveAddressList(addressInfos))}>ルート保存</Button> */}
             <Button variant="outline-dark" size="sm" onClick={()=>convertCord()}>ルート保存</Button>
-            <Button variant="outline-dark" size="sm" onClick={() => dispatch(changeFetchNaviInfoTrigger())} >ルート検索</Button>
+            <Button variant="outline-dark" size="sm" onClick={changeFetchNaviInfoTrigger} >ルート検索</Button>
           </div>
         </div>
 

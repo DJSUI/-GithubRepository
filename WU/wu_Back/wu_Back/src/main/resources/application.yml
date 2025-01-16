@@ -1,0 +1,26 @@
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: wu_Back
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url:   jdbc:mysql://localhost:3306/Temporary
+
+# ???????? com.mysql.cj.jdbc.Driver
+
+# ??mybatis???xml??
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sdj.wu_back.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

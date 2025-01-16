@@ -82,7 +82,7 @@ const MainMap = () => {
           source: new XYZ({
            title: "trafficMap",
           url: 'https://api.mapbox.com/styles/v1/mapbox/traffic-night-v2/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGFpamlhbmciLCJhIjoiY2x1cm51NDRxMDlheDJpbzk2ajhzN3p1bSJ9._Jjt7AubEPM0RCoDCM4NTg' ,
-          crossOrigin: 'anonymous',
+         
         }),
       }),
       ],
@@ -153,7 +153,12 @@ const MainMap = () => {
       })
       .catch(error => {
         console.error('获取信息+创建图层失败', error);
-      });
+      });  //地图创建完成 
+    
+    
+    
+    
+    
 
 // 图层3--- 用户自定义路径图层集
     const user_edit_vectorSource = new VectorSource();

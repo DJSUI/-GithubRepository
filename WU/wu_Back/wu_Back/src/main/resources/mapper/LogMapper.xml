@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sdj.wu_back.dao.LogDao">
+    <select id="findBySearch" resultType="com.sdj.wu_back.entity.Log">
+        select * from log
+        <where>
+            <if test="params != null and params.name !=null and params.name != ''">
+                and name like concat("%",#{params.name},"%")
+            </if>
+            <if test="params != null and params.username !=null and params.username != ''">
+                and name like concat("%",#{params.username},"%")
+            </if>
+        </where>
+    </select>
+    <delete id="deleteLog">
+        delete from type where id =#{id}
+    </delete>
+    <insert id="add" parameterType="com.sdj.wu_back.entity.Log">
+
+        insert  into  log(name,time,username,ip)values (#{name}, #{time},#{username},#{ip})
+
+    </insert>
+
+
+
+</mapper>
